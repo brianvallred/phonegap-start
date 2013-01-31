@@ -31,6 +31,13 @@ var app = {
     report: function(id) {
         // Report the event in the console
         console.log("Report: " + id);
+		
+        navigator.notification.alert(
+            'The device is ready!',  // message
+            this.alertDismissed,         // callback
+            'Success',            // title
+            'Dang me to heck'                  // buttonName
+        );
 
         // Toggle the state from "pending" to "complete" for the reported ID.
         // Accomplished by adding .hide to the pending element and removing
@@ -38,5 +45,8 @@ var app = {
         document.querySelector('#' + id + ' .pending').className += ' hide';
         var completeElem = document.querySelector('#' + id + ' .complete');
         completeElem.className = completeElem.className.split('hide').join('');
-    }
+    },
+	alertDismissed: function() {
+		// could do something here
+	}
 };
