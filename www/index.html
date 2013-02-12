@@ -24,22 +24,54 @@
 			app.initialize();
 			
 			function getLocation()
-			  {
-			  if (navigator.geolocation)
+			{
+				if (navigator.geolocation)
 				{
-				navigator.geolocation.getCurrentPosition(showPosition,showError);
+					var low = { maximumAge: 75000, enableHighAccuracy: false, timeout: 15000 };
+					navigator.geolocation.getCurrentPosition(showPosition, showError, low);
+					var high = { maximumAge: 15000, enableHighAccuracy: true, timeout: 30000 };
+					navigator.geolocation.getCurrentPosition(showPosition, showError, high);
 				}
-			  else{x.innerHTML="Geolocation is not supported by this browser.";}
-			  }
+				else
+				{
+					document.getElementById("mapholder").innerHTML="Geolocation is not supported by this browser.";
+				}
+			}
 
 			function showPosition(position)
-			  {
-			  var latlon=position.coords.latitude+","+position.coords.longitude;
+			{
+				var latlon=position.coords.latitude+","+position.coords.longitude;
+				var zoom = 10;
+				if (position.coords.accuracy != null)
+				{
+					if (position.coords.accuracy > 313875)
+						zoom = 5;
+					else if (position.coords.accuracy > 156937)
+						zoom = 6
+					else if (position.coords.accuracy > 78468)
+						zoom = 7;
+					else if (position.coords.accuracy > 39234)
+						zoom = 8;
+					else if (position.coords.accuracy > 19617)
+						zoom = 9;
+					else if (position.coords.accuracy > 9808)
+						zoom = 10;
+					else if (position.coords.accuracy > 4909)
+						zoom = 11;
+					else if (position.coords.accuracy > 2452)
+						zoom = 12;
+					else if (position.coords.accuracy > 1226)
+						zoom = 13;
+					else if (position.coords.accuracy > 613)
+						zoom = 14;
+					else
+						zoom = 15;
+				}
 
-			  var img_url="http://maps.googleapis.com/maps/api/staticmap?center="
-			  +latlon+"&zoom=11&size=300x250&sensor=false";
-			  document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
-			  }
+				var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+						+ latlon + "&zoom=" + zoom + "&size=300x250&sensor=false";
+				document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
+			}
 
 			function showError(error)
 			  {
